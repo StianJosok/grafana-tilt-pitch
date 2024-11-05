@@ -1,0 +1,27 @@
+services:
+  tilt-pitch:
+    build: .
+    container_name: tilt-pitch
+    network_mode: host
+    privileged: true
+    environment:
+      - PROMETHEUS_ENABLED=true
+      - PROMETHEUS_PORT=8000
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - /home/tilt/Desktop/tilt-pitch/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    volumes:
+      - /home/tilt/Desktop/tilt-pitch/grafana:/var/lib/grafana
